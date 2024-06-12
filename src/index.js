@@ -1,11 +1,11 @@
 import './pages/index.css'; // добавьте импорт главного файла стилей 
 import { initialCards } from './scripts/cards.js';
-import { createCard, deleteCard, likeCard } from './scripts/card.js';
+import { createCard, deleteCard, likeCard, plusCart} from './scripts/card.js';
 
 const cardList = document.querySelector('.places__list');
 
 initialCards.forEach(element => {
-    const card = createCard(element, deleteCard, likeCard);
+    const card = createCard(element, deleteCard, likeCard, plusCart);
     cardList.append(card);
 });
 
@@ -22,7 +22,7 @@ profileButton.addEventListener('click', () => pop());
 // Добавление карточки
 
 function popCart() {
-    const data = document.querySelector('.popup__image');
+    const data = document.querySelector('.popup_type_new-card');
     data.classList.add('popup_is-opened');
     console.log(data);
 }
