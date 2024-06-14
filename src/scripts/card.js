@@ -1,22 +1,31 @@
+import { openModal } from './modal.js' // Функции обработки popup
+
 // @todo: Функция создания карточки
-function createCard(cardInfo, deleteCard, likeCard, plusCart) {
+function createCard(cardInfo, deleteCard, likeCard, approximationCard) {
+    // Шаблон карточки
     const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-    
-    const likeButton = cardElement.querySelector('.card__like-button');
-    likeButton.addEventListener('click', () => likeCard(cardElement));
 
+    // Выводим карточку
     const cardImage = cardElement.querySelector('.card__image');
-    cardImage.src = cardInfo.link;
-    cardImage.alt = 'Фотография места, ' + cardInfo.name;
-    cardImage.addEventListener('click', () => plusCart(cardElement));
+    cardImage.src = cardInfo.link; // Ссылка на картинку
+    cardImage.alt = 'Фотография места, ' + cardInfo.name; // Описание картинки
 
     const cardTitle = cardElement.querySelector('.card__title');
-    cardTitle.textContent = cardInfo.name;
-    
+    cardTitle.textContent = cardInfo.name; // Текст к каринки
+
+    // Удаление карточки
     const deleteButtonCard = cardElement.querySelector('.card__delete-button');
     deleteButtonCard.addEventListener('click', () => deleteCard(cardElement));
 
+    // Лайк карточки
+    const likeButton = cardElement.querySelector('.card__like-button');
+    likeButton.addEventListener('click', () => likeCard(cardElement));
+
+    // Приблизить карточку
+    cardImage.addEventListener('click', () => approximationCard(cardElement));
+
+    // Возвращаем элемент
     return cardElement;
 }
 
@@ -26,27 +35,22 @@ function deleteCard(cardElement) {
 }
 
 // @todo: Функция лайка карточки
-// const likeCard = (evt) => evt.target.classList.toggle('card__like-button_is-active');
-
 function likeCard(cardElement) {
-    // const data = cardElement = document.querySelector('.card__like-button');
-    // data.classList.toggle('card__like-button_is-active');
-    cardElement.toggle('card__like-button_is-active');
+    const data = cardElement.querySelector('.card__like-button');
+    data.classList.toggle('card__like-button_is-active');
 }
 
-
-// Увеличение картинки
-function plusCart(cardElement) {
+// @todo: Функция увеличения карточки
+function approximationCard(cardElement) {
+    // Увеличение картинки
     const data = document.querySelector('.popup_type_image');
-    data.classList.add('popup_is-opened');
-
-    const imgData = document.querySelector('.popup__image');
-    imgData.src = cardElement.querySelector('.card__image').src;
-
+    openModal(data);
+    // Ссылка на картинку
+    const popupImg = document.querySelector('.popup__image');
+    popupImg.src = cardElement.querySelector('.card__image').src;
+    // Подпись к картинке
     const popupCaption = document.querySelector('.popup__caption');
-    popupCaption.textContent = cardElement.querySelector('.card__description').querySelector('.card__title').textContent;
-    
-    console.log(cardElement.querySelector('.card__description').querySelector('.card__title').textContent);
+    popupCaption.textContent = cardElement.querySelector('.card__title').textContent;
 }
 
-export { createCard, deleteCard, likeCard, plusCart };
+export { createCard, deleteCard, likeCard, approximationCard };
