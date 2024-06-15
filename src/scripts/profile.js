@@ -1,12 +1,20 @@
-import { openModal, closeModal } from './modal.js' // Функции обработки popup
+import { profile, profileTitle, profileDescription, titleInput, descriptionInput } from '../index.js';
 
-// Открыть редактро профиля
-function editProfile(profileEdit) {
-    openModal(profileEdit);
+function getProfile(profile) {
+    titleInput.value = profile.profileName;
+    descriptionInput.value = profile.profileDescription;
+
+    profileTitle.textContent = profile.profileName;
+    profileDescription.textContent = profile.profileDescription;
 }
 
-function closeProfile(closeProfileEdit) {
-    closeModal(closeProfileEdit);
-}
+function editProfile(evt) {
+    evt.preventDefault();
+  
+    profile.profileName = titleInput.value;
+    profile.profileDescription = descriptionInput.value;
+  
+    getProfile(profile);
+  };
 
-export { editProfile, closeProfile };
+export { getProfile, editProfile };
