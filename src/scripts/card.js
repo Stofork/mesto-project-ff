@@ -17,7 +17,7 @@ function createCard(cardInfo, deleteCard, likeCard, approximationCard) {
     const likeButton = cardElement.querySelector('.card__like-button');
     likeButton.addEventListener('click', () => likeCard(cardElement));
 
-    cardImage.addEventListener('click', () => approximationCard(cardElement));
+    // cardImage.addEventListener('click', () => approximationCard(cardElement));
 
     return cardElement;
 }

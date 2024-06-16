@@ -1,13 +1,10 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 import { createCard, deleteCard, likeCard, approximationCard } from './scripts/card.js';
-import { getProfile, editProfile } from './scripts/profile.js';
-import { openModal } from './scripts/modal.js';
-import { newCard } from './scripts/newCard.js';
+import { setProfile, editProfile } from './scripts/profile.js';
+import { editNewCard, setNewCard } from './scripts/newCard.js';
 
 //
-const classOpen = 'popup_is-opened';
-const classClose = 'popup__close';
 const profileEdit = document.querySelector('.popup_type_edit');
 const addCardEdit = document.querySelector('.popup_type_new-card');
 const profileTitle = document.querySelector('.profile__title');
@@ -23,24 +20,20 @@ const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
 //
 
-const profile = {
-    profileName: 'Жак-Ив Кусто',
-    profileDescription: 'Исследователь океана'
-};
-
 initialCards.forEach(element => {
-    const card = createCard(element, deleteCard, likeCard, approximationCard);
+    const card = createCard(element, deleteCard, likeCard);
     cardList.append(card);
 });
 
-getProfile(profile);
-
 profileForm.addEventListener('submit', editProfile);
 
-newCardForm.addEventListener('submit', newCard);
+newCardForm.addEventListener('submit', editNewCard);
 
-profileEditButton.addEventListener('click', () => openModal(profileEdit));
+profileEditButton.addEventListener('click', () => setProfile(profileEdit));
 
-addCardButton.addEventListener('click', () => openModal(addCardEdit));
+addCardButton.addEventListener('click', () => setNewCard(addCardEdit));
 
-export { cardList, classOpen, classClose, profile, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput };
+// console.log(cardNameInput);
+// cardImage.addEventListener('click', () => approximationCard(1));
+
+export { cardList, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput };

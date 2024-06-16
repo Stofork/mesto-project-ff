@@ -1,20 +1,21 @@
-import { profile, profileTitle, profileDescription, titleInput, descriptionInput } from '../index.js';
+import { profileTitle, profileDescription, titleInput, descriptionInput } from '../index.js';
+import { openModal } from './modal.js';
 
-function getProfile(profile) {
-    titleInput.value = profile.profileName;
-    descriptionInput.value = profile.profileDescription;
+function setProfile(profileEdit) {
+  profileEdit.querySelector(`.popup__form`).reset();
 
-    profileTitle.textContent = profile.profileName;
-    profileDescription.textContent = profile.profileDescription;
+  titleInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+
+  openModal(profileEdit);
 }
 
 function editProfile(evt) {
-    evt.preventDefault();
-  
-    profile.profileName = titleInput.value;
-    profile.profileDescription = descriptionInput.value;
-  
-    getProfile(profile);
-  };
+  evt.preventDefault();
 
-export { getProfile, editProfile };
+  profileTitle.textContent = titleInput.value;
+  profileDescription.textContent = descriptionInput.value;
+
+};
+
+export { setProfile, editProfile };
