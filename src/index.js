@@ -22,6 +22,8 @@ const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
 
 initialCards.forEach(element => {
     const card = createCard(element, deleteCard, likeCard);
+    const cardImage = card.querySelector('.card__image')
+    cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
     cardList.append(card);
 });
 
@@ -32,8 +34,5 @@ newCardForm.addEventListener('submit', editNewCard);
 profileEditButton.addEventListener('click', () => setProfile(profileEdit));
 
 addCardButton.addEventListener('click', () => setNewCard(addCardEdit));
-
-// console.log(cardNameInput);
-// cardImage.addEventListener('click', () => approximationCard(1));
 
 export { cardList, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput };

@@ -1,6 +1,6 @@
 import { openModal } from './modal.js'
 
-function createCard(cardInfo, deleteCard, likeCard, approximationCard) {
+function createCard(cardInfo, deleteCard, likeCard) {
     const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
@@ -17,8 +17,6 @@ function createCard(cardInfo, deleteCard, likeCard, approximationCard) {
     const likeButton = cardElement.querySelector('.card__like-button');
     likeButton.addEventListener('click', () => likeCard(cardElement));
 
-    // cardImage.addEventListener('click', () => approximationCard(cardElement));
-
     return cardElement;
 }
 
@@ -31,16 +29,16 @@ function likeCard(cardElement) {
     data.classList.toggle('card__like-button_is-active');
 }
 
-function approximationCard(cardElement) {
-
-    const data = document.querySelector('.popup_type_image');
-    openModal(data);
+function approximationCard(name, link) {
 
     const popupImg = document.querySelector('.popup__image');
-    popupImg.src = cardElement.querySelector('.card__image').src;
+    popupImg.src = link;
 
     const popupCaption = document.querySelector('.popup__caption');
-    popupCaption.textContent = cardElement.querySelector('.card__title').textContent;
+    popupCaption.textContent = name;
+
+    const popup = document.querySelector('.popup_type_image');
+    openModal(popup);
 }
 
-export { createCard, deleteCard, likeCard, approximationCard };
+export { createCard, deleteCard, likeCard, approximationCard};
