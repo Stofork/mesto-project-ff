@@ -1,14 +1,13 @@
 import { createCard, deleteCard, likeCard } from './card.js';
-import { cardList, cardNameInput, cardLinkInput } from '../index.js';
+import { cardList, cardNameInput, cardLinkInput, approximationCard } from '../index.js';
 import { openModal } from './modal.js';
-import { approximationCard } from './card.js';
 
 function setNewCard(addCardEdit) {
     addCardEdit.querySelector(`.popup__form`).reset()
     openModal(addCardEdit);
 }
 
-function editNewCard(evt) {
+function createNewCard(evt) {
     evt.preventDefault();
     
     const newCardName = cardNameInput.value;
@@ -26,4 +25,4 @@ function editNewCard(evt) {
 
 }
 
-export { editNewCard, setNewCard };
+export { createNewCard, setNewCard };

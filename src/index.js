@@ -1,8 +1,9 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
-import { createCard, deleteCard, likeCard, approximationCard } from './scripts/card.js';
+import { createCard, deleteCard, likeCard } from './scripts/card.js';
 import { setProfile, editProfile } from './scripts/profile.js';
-import { editNewCard, setNewCard } from './scripts/newCard.js';
+import { createNewCard, setNewCard } from './scripts/newCard.js';
+import { openModal } from './scripts/modal.js'
 
 //
 const profileEdit = document.querySelector('.popup_type_edit');
@@ -27,12 +28,24 @@ initialCards.forEach(element => {
     cardList.append(card);
 });
 
+function approximationCard(name, link) {
+
+    const popupImg = document.querySelector('.popup__image');
+    popupImg.src = link;
+
+    const popupCaption = document.querySelector('.popup__caption');
+    popupCaption.textContent = name;
+
+    const popup = document.querySelector('.popup_type_image');
+    openModal(popup);
+}
+
 profileForm.addEventListener('submit', editProfile);
 
-newCardForm.addEventListener('submit', editNewCard);
+newCardForm.addEventListener('submit', createNewCard);
 
 profileEditButton.addEventListener('click', () => setProfile(profileEdit));
 
 addCardButton.addEventListener('click', () => setNewCard(addCardEdit));
 
-export { cardList, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput };
+export { cardList, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput, approximationCard };
