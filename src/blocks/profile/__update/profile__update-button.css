@@ -1,0 +1,10 @@
+.profile__update-button {
+  background: transparent url("../../../images/edit-icon.svg") center no-repeat;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  cursor: pointer;
+}

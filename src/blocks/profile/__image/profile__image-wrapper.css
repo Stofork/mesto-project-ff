@@ -1,0 +1,8 @@
+.profile__image-wrapper {
+    display: grid;
+    cursor: pointer;
+}
+
+.profile__image-wrapper:hover .profile__image-over {
+    opacity: 1;
+}

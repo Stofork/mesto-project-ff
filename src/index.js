@@ -1,14 +1,30 @@
 import './pages/index.css';
-import { initialCards } from './scripts/cards.js';
-import { createCard, deleteCard, likeCard } from './scripts/card.js';
-import { setProfile, editProfile } from './scripts/profile.js';
-import { createNewCard, setNewCard } from './scripts/newCard.js';
+import { createCard, deleteCard, changingLikeCard } from './scripts/card.js';
+import { valuveProfile, editProfile, getProfile, valuvAvatar, editAvatar } from './scripts/profile.js';
+import { createNewCard, valuveNewCard } from './scripts/newCard.js';
 import { openModal } from './scripts/modal.js'
+import { enableValidation, clearValidation} from './scripts/validation.js'
+import { getInitialCards, getInitialProfile} from './scripts/api.js'
 
-//
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
+
+const cards = getInitialCards();
+const profile = getInitialProfile();
 const profileEdit = document.querySelector('.popup_type_edit');
+const avatarEdit = document.querySelector('.popup_avatar_edit');
+const avatarEditButton = document.querySelector('.profile__image-over');
+const newAvatarForm = document.forms['edit-profile-avatar'];
+const avatarLinkInput = newAvatarForm.querySelector('.popup__input_type_url');
 const addCardEdit = document.querySelector('.popup_type_new-card');
 const profileTitle = document.querySelector('.profile__title');
+const profileImage = document.querySelector('.profile__image');
 const profileDescription = document.querySelector('.profile__description');
 const profileForm = document.forms['edit-profile'];
 const titleInput = profileForm.querySelector('.popup__input_type_name');
@@ -19,14 +35,28 @@ const addCardButton = document.querySelector('.profile__add-button');
 const newCardForm = document.forms['new-place'];
 const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
-//
 
-initialCards.forEach(element => {
-    const card = createCard(element, deleteCard, likeCard);
-    const cardImage = card.querySelector('.card__image')
-    cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
-    cardList.append(card);
-});
+function processingProfile(profile) {
+    profile
+        .then((profile) => {
+            getProfile(profile);
+        })
+}
+
+function processingCard(cards, profile) {
+    profile
+        .then((profile) => {
+            cards
+            .then((cards) => {
+                cards.forEach(element => {
+                    const card = createCard(element, deleteCard, changingLikeCard, profile);
+                    const cardImage = card.querySelector('.card__image')
+                    cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
+                    cardList.append(card);
+                });
+            });
+        });
+}
 
 function approximationCard(name, link) {
 
@@ -42,10 +72,54 @@ function approximationCard(name, link) {
 
 profileForm.addEventListener('submit', editProfile);
 
-newCardForm.addEventListener('submit', createNewCard);
+function processingNewCard(evt) {
+    evt.preventDefault();
+    evt.submitter.textContent = 'Сохранение...';
+    
+    profile
+        .then((profile) => {
+            createNewCard(profile);
+        })
+    
+}
+
+newCardForm.addEventListener('submit', processingNewCard);
+
+function setProfile(profileEdit) {
+    valuveProfile(profileEdit);
+    clearValidation(profileEdit, validationConfig);
+}
 
 profileEditButton.addEventListener('click', () => setProfile(profileEdit));
 
+function setAvatarProfile(avatarEdit) {
+    valuvAvatar(avatarEdit);
+    clearValidation(avatarEdit, validationConfig);
+}
+
+avatarEditButton.addEventListener('click', () => setAvatarProfile(avatarEdit));
+
+newAvatarForm.addEventListener('submit', editAvatar);
+
+function setNewCard(addCardEdit) {
+    valuveNewCard(addCardEdit);
+    clearValidation(addCardEdit, validationConfig);
+}
+
 addCardButton.addEventListener('click', () => setNewCard(addCardEdit));
 
-export { cardList, profileTitle, profileDescription, titleInput, descriptionInput, cardNameInput, cardLinkInput, approximationCard };
+enableValidation(validationConfig);
+
+Promise.all([
+    cards,
+    profile
+  ])
+    .then(() => {
+        processingCard(cards, profile);
+        processingProfile(profile);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+export { cardList, profileTitle, profileDescription, profileImage, titleInput, descriptionInput, cardNameInput, cardLinkInput, approximationCard, avatarLinkInput};
