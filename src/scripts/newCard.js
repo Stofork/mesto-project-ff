@@ -1,7 +1,7 @@
 import { createCard, deleteCard, changingLikeCard } from './card.js';
-import { cardList, cardNameInput, cardLinkInput, approximationCard } from '../index.js';
-import { openModal } from './modal.js';
-import { addInitialCards } from './api.js'
+import { cardList, cardNameInput, cardLinkInput } from '../index.js';
+import { openModal, closeModal} from './modal.js';
+import { addCard } from './api.js'
 
 function valuveNewCard(addCardEdit) {
     addCardEdit.querySelector(`.popup__form`).reset()
@@ -9,7 +9,7 @@ function valuveNewCard(addCardEdit) {
     openModal(addCardEdit);
 }
 
-function createNewCard(profile) {
+function addNewCard(addCardEdit, profileId) {
     const newCardName = cardNameInput.value;
     const newCardLink = cardLinkInput.value;
 
@@ -18,14 +18,14 @@ function createNewCard(profile) {
         link: newCardLink,
     };
 
-    const newCardInfo = addInitialCards(newCard);
+    const newCardInfo = addCard(newCard);
     newCardInfo
         .then((newCardInfo) => {
-            const card = createCard(newCardInfo, deleteCard, changingLikeCard, profile);
-            const cardImage = card.querySelector('.card__image')
-            cardImage.addEventListener('click', () => approximationCard(newCardName, newCardLink));
+            const card = createCard(newCardInfo, deleteCard, changingLikeCard, profileId);
             cardList.prepend(card);
+            closeModal(addCardEdit);
         })
+        .catch(err => console.log(`Ошибка добавления карточки: ${err}`));
 }
 
-export { createNewCard, valuveNewCard };
+export { addNewCard, valuveNewCard };

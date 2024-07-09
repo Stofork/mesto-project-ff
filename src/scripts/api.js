@@ -1,5 +1,3 @@
-import { editProfile } from "./profile";
-
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-17',
     headers: {
@@ -8,17 +6,21 @@ const config = {
     }
 }
 
+function getResponseData(res) {
+    if (!res.ok) {
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+} 
+
 export const getInitialProfile = () => {
     return fetch(`${config.baseUrl}/users/me`, {
         headers: config.headers
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка загрузки профиля ${err}`));
 }
 
 export const editInitialProfile = (titleInput, descriptionInput) => {
@@ -31,12 +33,9 @@ export const editInitialProfile = (titleInput, descriptionInput) => {
         })
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка изменения профиля ${err}`));
 }
 
 export const getInitialCards = () => {
@@ -44,15 +43,12 @@ export const getInitialCards = () => {
       headers: config.headers
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка загрузки карточек ${err}`));
 }
 
-export const addInitialCards = (newCard) => {
+export const addCard = (newCard) => {
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
@@ -62,26 +58,20 @@ export const addInitialCards = (newCard) => {
         })
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка добавления карточки ${err}`));
 }
 
-export const delInitialCards = (cardId) => {
+export const delInitialCard = (cardId) => {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers: config.headers
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка удаление карточки ${err}`));
 }
 
 export const likeCards = (cardId) => {
@@ -90,26 +80,20 @@ export const likeCards = (cardId) => {
         headers: config.headers
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка постановки лайка ${err}`));
 }
 
-export const delLikeCards = (cardId) => {
+export const delLikeCard = (cardId) => {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: config.headers
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка удаления лайка ${err}`));
 }
 
 export const editAvatarProfile = (newAvatar) => {
@@ -121,10 +105,7 @@ export const editAvatarProfile = (newAvatar) => {
         })
     })
     .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-    });
+        return getResponseData(res);
+    })
+    .catch(err => console.log(`Ошибка удаления аватара ${err}`));
 }

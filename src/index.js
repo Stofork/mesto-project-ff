@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { createCard, deleteCard, changingLikeCard } from './scripts/card.js';
 import { valuveProfile, editProfile, getProfile, valuvAvatar, editAvatar } from './scripts/profile.js';
-import { createNewCard, valuveNewCard } from './scripts/newCard.js';
+import { addNewCard, valuveNewCard } from './scripts/newCard.js';
 import { openModal } from './scripts/modal.js'
 import { enableValidation, clearValidation} from './scripts/validation.js'
 import { getInitialCards, getInitialProfile} from './scripts/api.js'
@@ -15,8 +15,6 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 };
 
-const cards = getInitialCards();
-const profile = getInitialProfile();
 const profileEdit = document.querySelector('.popup_type_edit');
 const avatarEdit = document.querySelector('.popup_avatar_edit');
 const avatarEditButton = document.querySelector('.profile__image-over');
@@ -37,31 +35,22 @@ const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
 
 function processingProfile(profile) {
-    profile
-        .then((profile) => {
-            getProfile(profile);
-        })
+    getProfile(profile);
 }
 
-function processingCard(cards, profile) {
-    profile
-        .then((profile) => {
-            cards
-            .then((cards) => {
-                cards.forEach(element => {
-                    const card = createCard(element, deleteCard, changingLikeCard, profile);
-                    const cardImage = card.querySelector('.card__image')
-                    cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
-                    cardList.append(card);
-                });
-            });
-        });
+function processingCard(cards, profileId) {
+    cards.forEach(element => {
+        const card = createCard(element, deleteCard, changingLikeCard, profileId);
+        const cardImage = card.querySelector('.card__image')
+        cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
+        cardList.append(card);
+    });
 }
 
 function approximationCard(name, link) {
-
     const popupImg = document.querySelector('.popup__image');
     popupImg.src = link;
+    popupImg.alt = 'Фотография места, ' + name;
 
     const popupCaption = document.querySelector('.popup__caption');
     popupCaption.textContent = name;
@@ -70,17 +59,24 @@ function approximationCard(name, link) {
     openModal(popup);
 }
 
-profileForm.addEventListener('submit', editProfile);
+function processingeditProfile(evt) {
+    evt.preventDefault();
+    editProfile(profileEdit);
+}
+
+profileForm.addEventListener('submit', processingeditProfile);
 
 function processingNewCard(evt) {
     evt.preventDefault();
-    evt.submitter.textContent = 'Сохранение...';
     
-    profile
+    getInitialProfile()
         .then((profile) => {
-            createNewCard(profile);
+            addNewCard(addCardEdit, profile._id);
         })
-    
+        .catch(err => console.log(`Ошибка загрузки профиля при добавление карточки: ${err}`))
+        .finally(() =>{
+            addCardEdit.querySelector('.popup__button').textContent = 'Сохранение...';
+        });
 }
 
 newCardForm.addEventListener('submit', processingNewCard);
@@ -99,7 +95,12 @@ function setAvatarProfile(avatarEdit) {
 
 avatarEditButton.addEventListener('click', () => setAvatarProfile(avatarEdit));
 
-newAvatarForm.addEventListener('submit', editAvatar);
+function processingEditAvatar(evt) {
+    evt.preventDefault();
+    editAvatar(avatarEdit);
+}
+
+newAvatarForm.addEventListener('submit', processingEditAvatar);
 
 function setNewCard(addCardEdit) {
     valuveNewCard(addCardEdit);
@@ -110,16 +111,11 @@ addCardButton.addEventListener('click', () => setNewCard(addCardEdit));
 
 enableValidation(validationConfig);
 
-Promise.all([
-    cards,
-    profile
-  ])
-    .then(() => {
-        processingCard(cards, profile);
+Promise.all([ getInitialProfile(), getInitialCards() ])
+    .then(([ profile, cards ]) => {
         processingProfile(profile);
+        processingCard(cards, profile._id);
     })
-    .catch((err) => {
-        console.log(err);
-    });
+    .catch(err => console.log(`Ошибка первоначальной загрузки: ${err}`));
 
-export { cardList, profileTitle, profileDescription, profileImage, titleInput, descriptionInput, cardNameInput, cardLinkInput, approximationCard, avatarLinkInput};
+export { cardList, profileTitle, profileDescription, profileImage, titleInput, descriptionInput, cardNameInput, cardLinkInput, approximationCard, avatarLinkInput };

@@ -1,5 +1,5 @@
-import { profileTitle, profileDescription, profileImage, titleInput, descriptionInput, avatarLinkInput} from '../index.js';
-import { openModal } from './modal.js';
+import { profileTitle, profileDescription, profileImage, titleInput, descriptionInput, avatarLinkInput } from '../index.js';
+import { openModal, closeModal } from './modal.js';
 import { editInitialProfile, editAvatarProfile } from './api.js'
 
 function getProfile(profile) {
@@ -16,15 +16,17 @@ function valuveProfile(profileEdit) {
   openModal(profileEdit);
 }
 
-function editProfile(evt) {
-  evt.preventDefault();
-  evt.submitter.textContent = 'Сохранение...';
-
-  profileTitle.textContent = titleInput.value;
-  profileDescription.textContent = descriptionInput.value;
-
-  editInitialProfile(titleInput.value, descriptionInput.value);
-
+function editProfile(profileEdit) {
+  editInitialProfile(titleInput.value, descriptionInput.value)
+    .then((res) => {
+        profileTitle.textContent = res.name;
+        profileDescription.textContent = res.about;
+        closeModal(profileEdit); 
+    }) 
+    .catch(err => console.log(`Ошибка обновления профиля: ${err}`))
+    .finally(() =>{
+      profileEdit.querySelector('.popup__button').textContent = 'Сохранение...';
+    });
 };
 
 function valuvAvatar(avatarEdit) {
@@ -33,12 +35,16 @@ function valuvAvatar(avatarEdit) {
   openModal(avatarEdit);
 }
 
-function editAvatar(evt) {
-  evt.preventDefault();
-  evt.submitter.textContent = 'Сохранение...';
-  
-  editAvatarProfile(avatarLinkInput.value);
-  profileImage.style.backgroundImage = `url(${avatarLinkInput.value})`;
+function editAvatar(avatarEdit) {
+  editAvatarProfile(avatarLinkInput.value)
+    .then((res) => {
+      profileImage.style.backgroundImage = `url(${res.avatar})`;
+      closeModal(avatarEdit); 
+  }) 
+  .catch(err => console.log(`Ошибка обновления аватара: ${err}`))
+  .finally(() =>{
+    avatarEdit.querySelector('.popup__button').textContent = 'Сохранение...';
+  });
 }
 
 export { valuveProfile, editProfile, getProfile, valuvAvatar, editAvatar };
