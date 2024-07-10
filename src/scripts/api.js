@@ -19,8 +19,7 @@ export const getInitialProfile = () => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка загрузки профиля ${err}`));
+    });
 }
 
 export const editInitialProfile = (titleInput, descriptionInput) => {
@@ -34,8 +33,7 @@ export const editInitialProfile = (titleInput, descriptionInput) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка изменения профиля ${err}`));
+    });
 }
 
 export const getInitialCards = () => {
@@ -44,8 +42,7 @@ export const getInitialCards = () => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка загрузки карточек ${err}`));
+    });
 }
 
 export const addCard = (newCard) => {
@@ -59,8 +56,7 @@ export const addCard = (newCard) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка добавления карточки ${err}`));
+    });
 }
 
 export const delInitialCard = (cardId) => {
@@ -70,8 +66,7 @@ export const delInitialCard = (cardId) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка удаление карточки ${err}`));
+    });
 }
 
 export const likeCards = (cardId) => {
@@ -81,8 +76,7 @@ export const likeCards = (cardId) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка постановки лайка ${err}`));
+    });
 }
 
 export const delLikeCard = (cardId) => {
@@ -92,8 +86,7 @@ export const delLikeCard = (cardId) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка удаления лайка ${err}`));
+    });
 }
 
 export const editAvatarProfile = (newAvatar) => {
@@ -106,6 +99,5 @@ export const editAvatarProfile = (newAvatar) => {
     })
     .then(res => {
         return getResponseData(res);
-    })
-    .catch(err => console.log(`Ошибка удаления аватара ${err}`));
+    });
 }

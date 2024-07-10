@@ -33,6 +33,7 @@ const addCardButton = document.querySelector('.profile__add-button');
 const newCardForm = document.forms['new-place'];
 const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = newCardForm.querySelector('.popup__input_type_url');
+let profileId;
 
 function processingProfile(profile) {
     getProfile(profile);
@@ -40,9 +41,7 @@ function processingProfile(profile) {
 
 function processingCard(cards, profileId) {
     cards.forEach(element => {
-        const card = createCard(element, deleteCard, changingLikeCard, profileId);
-        const cardImage = card.querySelector('.card__image')
-        cardImage.addEventListener('click', () => approximationCard(element.name, element.link));
+        const card = createCard(element, deleteCard, changingLikeCard, approximationCard, profileId);
         cardList.append(card);
     });
 }
@@ -68,15 +67,7 @@ profileForm.addEventListener('submit', processingeditProfile);
 
 function processingNewCard(evt) {
     evt.preventDefault();
-    
-    getInitialProfile()
-        .then((profile) => {
-            addNewCard(addCardEdit, profile._id);
-        })
-        .catch(err => console.log(`Ошибка загрузки профиля при добавление карточки: ${err}`))
-        .finally(() =>{
-            addCardEdit.querySelector('.popup__button').textContent = 'Сохранение...';
-        });
+    addNewCard(addCardEdit, profileId);
 }
 
 newCardForm.addEventListener('submit', processingNewCard);
@@ -113,8 +104,9 @@ enableValidation(validationConfig);
 
 Promise.all([ getInitialProfile(), getInitialCards() ])
     .then(([ profile, cards ]) => {
+        profileId = profile._id;
         processingProfile(profile);
-        processingCard(cards, profile._id);
+        processingCard(cards, profileId);
     })
     .catch(err => console.log(`Ошибка первоначальной загрузки: ${err}`));
 

@@ -1,7 +1,6 @@
 import { likeCards, delLikeCard, delInitialCard } from './api.js';
-import { approximationCard } from '../index.js';
 
-function createCard(cardInfo, deleteCard, changingLikeCard, profileId) {
+function createCard(cardInfo, deleteCard, changingLikeCard, approximationCard, profileId) {
     const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
